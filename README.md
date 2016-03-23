@@ -19,7 +19,7 @@ def set_up_logging():
 ```
 
 
-If you're using a more modern combination of a JSON/YAML config file and `logging.dictConfig`, your config file should look like the following (assuming YAML concrete syntax):
+If you're using a more modern combination of a JSON/YAML config file and `logging.config.dictConfig`, your config file should look like the following (assuming YAML concrete syntax):
 
 ```yaml
 formatters:
