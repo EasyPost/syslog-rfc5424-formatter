@@ -1,5 +1,7 @@
 This module implements a python `logging` formatter which produces well-formed RFC5424-compatible Syslog messages to a given socket.
 
+[![Circle CI](https://circleci.com/gh/EasyPost/syslog-rfc5424-formatter.svg?style=svg)](https://circleci.com/gh/EasyPost/syslog-rfc5424-formatter)
+
 ## Usage
 
 If you're configuring your loggers from code, you should use this formatter as below:
