@@ -1,0 +1,4 @@
+pytest
+pytest-cov
+mock
+syslog_rfc5424_parser

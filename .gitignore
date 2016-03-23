@@ -1,0 +1,14 @@
+# build stuff
+build/
+dist/
+*.egg-info
+.cache/
+__pycache__/
+venv/
+
+# test products
+.tox
+test-*.xml
+htmlcov/
+coverage.xml
+.coverage
