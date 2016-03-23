@@ -1,0 +1,9 @@
+dependencies:
+  override:
+    - pip install tox tox-pyenv
+    - pyenv local 2.6.8 2.7.10 3.3.3 3.4.3 3.5.0
+test:
+  override:
+    - tox
+
+# vim: set syntax=yaml ts=2 sw=2 sts=0 expandtab:
