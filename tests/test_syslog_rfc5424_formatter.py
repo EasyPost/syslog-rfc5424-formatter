@@ -69,3 +69,9 @@ class RFC5424FormatterTestCase(TestCase):
             assert fields.procid == 1
         finally:
             shutil.rmtree(working_dir)
+
+    def test_hostname_fails(*args):
+        with mock.patch('socket.gethostname', side_effect=ValueError):
+            f = RFC5424Formatter()
+            r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
+            assert f.format(r) == '1 1970-01-01T00:00:00Z - root 1 - - A Message'
