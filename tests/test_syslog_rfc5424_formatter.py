@@ -29,11 +29,11 @@ class RFC5424FormatterTestCase(TestCase):
         assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root 1 - - A Message'
 
     def test_non_utc(*args):
-        with mock.patch.dict(os.environ, {'TZ': 'America/Los_Angeles'}):
+        with mock.patch.dict(os.environ, {'TZ': 'America/Phoenix'}):
             time.tzset()
             f = RFC5424Formatter()
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-            assert f.format(r) == '1 1969-12-31T16:00:00-07:00 the_host root 1 - - A Message'
+            assert f.format(r) == '1 1969-12-31T17:00:00-07:00 the_host root 1 - - A Message'
 
     def test_long_pid(*args):
         with mock.patch('os.getpid', return_value=999999):
