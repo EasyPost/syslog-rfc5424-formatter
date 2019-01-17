@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name="syslog-rfc5424-formatter",
-    version="1.0.0",
+    version="1.0.1",
     author="EasyPost",
     author_email="oss@easypost.com",
     url="https://github.com/easypost/syslog-rfc5424-formatter",
@@ -14,11 +14,7 @@ setup(
     keywords=["logging"],
     description="Logging formatter which produces well-formatted RFC5424 Syslog Protocol messages",
     long_description=open('README.md', 'r').read(),
-    entry_points={
-        'console_scripts': [
-            'stdin2epilog = epilog_client.stdin:main',
-        ]
-    },
+    long_description_content_type='text/markdown',
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
@@ -28,6 +24,8 @@ setup(
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Operating System :: POSIX",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: ISC License (ISCL)",
