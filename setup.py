@@ -5,7 +5,7 @@ from setuptools import setup
 
 setup(
     name="syslog-rfc5424-formatter",
-    version="1.1.0",
+    version="1.1.1",
     author="EasyPost",
     author_email="oss@easypost.com",
     url="https://github.com/easypost/syslog-rfc5424-formatter",

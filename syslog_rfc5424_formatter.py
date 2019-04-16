@@ -4,7 +4,7 @@ import socket
 import datetime
 import re
 
-version_info = (1, 1, 0)
+version_info = (1, 1, 1)
 __version__ = '.'.join(str(s) for s in version_info)
 __author__ = 'EasyPost <oss@easypost.com>'
 
