@@ -44,7 +44,7 @@ class RFC5424FormatterTestCase(TestCase):
     def test_format_string(*args):
         f = RFC5424Formatter('%(message)s banana')
         r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root python - - - A Message banana'
+        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message banana'
 
     def test_integration(*args):
         try:
