@@ -66,7 +66,7 @@ class RFC5424FormatterTestCase(TestCase):
             assert fields.hostname == 'the_host'
             assert fields.appname == 'python'
             assert fields.msg == 'A Message\x00'
-            assert fields.procid == '-'
+            assert fields.procid == None
         finally:
             shutil.rmtree(working_dir)
 
