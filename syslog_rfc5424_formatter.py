@@ -36,19 +36,6 @@ class RFC5424Formatter(logging.Formatter, object):
     the format string that you pass in the constructor is only
     applied to the message body (and should typically just be %(message)).
 
-    The '- -' sections in the resulting message are the "msg ID" and
-    "Structured-Data" Elements, respectively
-
-    MSGID (Description from RFC5424):
-       The MSGID SHOULD identify the type of message.  For example, a
-   firewall might use the MSGID "TCPIN" for incoming TCP traffic and the
-   MSGID "TCPOUT" for outgoing TCP traffic.  Messages with the same
-   MSGID should reflect events of the same semantics.  The MSGID itself
-   is a string without further semantics.  It is intended for filtering
-   messages on a relay or collector.
-   The NILVALUE SHOULD be used when the syslog application does not, or
-   cannot, provide any value.
-
    Stuctured Data Example:
         [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"]
     '''
