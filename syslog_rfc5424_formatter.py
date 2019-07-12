@@ -39,7 +39,7 @@ class RFC5424Formatter(logging.Formatter, object):
    Stuctured Data Example:
         [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"]
     '''
-    def __init__(self, *args, appname='python', procid='-', msgid='-', data='-', **kwargs):
+    def __init__(self, appname='python', procid='-', msgid='-', data='-', *args, **kwargs):
         self._tz_fix = re.compile(r'([+-]\d{2})(\d{2})$')
         self.__defaults ={
             'appname': appname,
