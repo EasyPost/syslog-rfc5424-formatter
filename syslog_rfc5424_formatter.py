@@ -4,7 +4,7 @@ import socket
 import datetime
 import re
 
-version_info = (1, 1, 1)
+version_info = (1, 1, 2)
 __version__ = '.'.join(str(s) for s in version_info)
 __author__ = 'EasyPost <oss@easypost.com>'
 
@@ -73,8 +73,13 @@ class RFC5424Formatter(logging.Formatter, object):
             isotime = isotime + 'Z'
 
         record.__dict__['isotime'] = isotime
+        record.__dict__['appname'] = 'python'
+        record.__dict__['procid'] = '-'
+        record.__dict__['msgid'] = '-'
+        record.__dict__['data'] = '-'
+        record.__dict__.update(record.args)
 
-        header = '1 {isotime} {hostname} {name} {process} - - '.format(
+        header = '1 {isotime} {hostname} {appname} {procid} {msgid} {data} '.format(
             **record.__dict__
         )
         return header + super(RFC5424Formatter, self).format(record)
