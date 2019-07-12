@@ -42,7 +42,7 @@ class RFC5424FormatterTestCase(TestCase):
             assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message'
 
     def test_format_string(*args):
-        f = RFC5424Formatter('%(message)s banana')
+        f = RFC5424Formatter('python', '-', '-', '-', '%(message)s banana')
         r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
         assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message banana'
 
