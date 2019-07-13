@@ -26,25 +26,25 @@ class RFC5424FormatterTestCase(TestCase):
     def test_basic(*args):
         f = RFC5424Formatter()
         r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message'
+        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root - - - A Message'
 
     def test_non_utc(*args):
         with mock.patch.dict(os.environ, {'TZ': 'America/Phoenix'}):
             time.tzset()
             f = RFC5424Formatter()
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-            assert f.format(r) == '1 1969-12-31T17:00:00-07:00 the_host python - - - A Message'
+            assert f.format(r) == '1 1969-12-31T17:00:00-07:00 the_host root - - - A Message'
 
     def test_long_pid(*args):
         with mock.patch('os.getpid', return_value=999999):
             f = RFC5424Formatter()
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-            assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message'
+            assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root - - - A Message'
 
     def test_format_string(*args):
-        f = RFC5424Formatter('python', '-', '-', '-', '%(message)s banana')
+        f = RFC5424Formatter('%(message)s banana')
         r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host python - - - A Message banana'
+        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root - - - A Message banana'
 
     def test_integration(*args):
         try:
@@ -58,13 +58,13 @@ class RFC5424FormatterTestCase(TestCase):
             h.handle(r)
             s.settimeout(1)
             msg_body = s.recv(1024)
-            assert msg_body == b'<15>1 1970-01-01T00:00:00Z the_host python - - - A Message\x00'
+            assert msg_body == b'<15>1 1970-01-01T00:00:00Z the_host root - - - A Message\x00'
             fields = SyslogMessage.parse(msg_body.decode('utf-8'))
             assert fields.severity == SyslogSeverity.debug
             assert fields.facility == SyslogFacility.user
             assert fields.version == 1
             assert fields.hostname == 'the_host'
-            assert fields.appname == 'python'
+            assert fields.appname == 'root'
             assert fields.msg == 'A Message\x00'
             assert fields.procid == None
         finally:
@@ -74,4 +74,4 @@ class RFC5424FormatterTestCase(TestCase):
         with mock.patch('socket.gethostname', side_effect=ValueError):
             f = RFC5424Formatter()
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-            assert f.format(r) == '1 1970-01-01T00:00:00Z - python - - - A Message'
+            assert f.format(r) == '1 1970-01-01T00:00:00Z - root - - - A Message'

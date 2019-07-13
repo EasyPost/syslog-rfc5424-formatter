@@ -39,15 +39,41 @@ class RFC5424Formatter(logging.Formatter, object):
    Stuctured Data Example:
         [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"]
     '''
-    def __init__(self, appname='python', procid='-', msgid='-', data='-', *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         self._tz_fix = re.compile(r'([+-]\d{2})(\d{2})$')
-        self.__defaults ={
-            'appname': appname,
-            'procid': procid,
-            'msgid': msgid,
-            'data': data
-            }
+        self.procid = None
+        self.msgid = None
+        self.sd_id = "Undefined@32473"
         return super(RFC5424Formatter, self).__init__(*args, **kwargs)
+
+    
+    @property
+    def procid(self):
+        """Default PROCID to add to syslog message"""
+        return self._procid
+
+    @procid.setter
+    def procid(self, id):
+        self._procid = id
+
+    @property
+    def msgid(self):
+        """Default MSGID to add to syslog message"""
+        return self._msgid
+
+    @msgid.setter
+    def msgid(self, id):
+        self._msgid = id
+
+    @property
+    def sd_id(self):
+        """Default SD-ID to add to STRUCTURED-DATA section in syslog message"""
+        return self._sd_id
+
+    @sd_id.setter
+    def sd_id(self, id):
+        if not id: raise Exception("SD-ID cannot be empty")
+        self._sd_id = id
 
     def format(self, record):
         try:
@@ -66,10 +92,41 @@ class RFC5424Formatter(logging.Formatter, object):
             isotime = isotime + 'Z'
 
         record.__dict__['isotime'] = isotime
-        record.__dict__.update(self.__defaults)
+        record.__dict__['procid'] = self.procid if self.procid else '-'
+        record.__dict__['msgid'] = self.msgid if self.msgid else '-'
+
+        if 'structured_data' in record.args:
+            if not isinstance(record.args['structured_data'],dict):
+                raise Exception("structured_data must be a dict")
+
+            all_sddata = {}
+            default_sdparam = {}
+
+            for key, value in record.args['structured_data'].items():
+                if isinstance(value,dict):
+                    all_sddata[key] = value
+                else:
+                    default_sdparam[key] = value
+
+            if len(default_sdparam) > 0:
+                if self.sd_id in all_sddata: raise Exception("Cannot use same SD-ID twice")
+                all_sddata[self.sd_id] = default_sdparam
+
+            sd = ''
+            for sdid, data in all_sddata.items():
+                sd += '[{0}'.format(sdid)
+                for key, value in data.items():
+                    escaped = value.replace('\\', '\\\\').replace(']', '\\]').replace('"', '\\"')
+                    sd += ' {0}="{1}"'.format(key, escaped)
+                sd += ']'
+
+            record.__dict__['sd'] = sd
+        else:
+            record.__dict__['sd'] = '-'
+
         record.__dict__.update(record.args)
 
-        header = '1 {isotime} {hostname} {appname} {procid} {msgid} {data} '.format(
+        header = '1 {isotime} {hostname} {name} {procid} {msgid} {sd} '.format(
             **record.__dict__
         )
         return header + super(RFC5424Formatter, self).format(record)
