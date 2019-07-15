@@ -35,11 +35,26 @@ class RFC5424FormatterTestCase(TestCase):
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
             assert f.format(r) == '1 1969-12-31T17:00:00-07:00 the_host root 1 - - A Message'
 
-    def test_long_pid(*args):
-        with mock.patch('os.getpid', return_value=999999):
-            f = RFC5424Formatter()
-            r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
-            assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root 999999 - - A Message'
+    def test_properties(*args):
+        f = RFC5424Formatter()
+        f.msgid = 'msgid'
+        f.procid = 999999
+        r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
+        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root 999999 msgid - A Message'
+
+    def test_properties_override(*args):
+        f = RFC5424Formatter()
+        f.msgid = 'msgid'
+        f.procid = 999999
+        r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'args': {'msgid': 'digsm', 'procid': 1234}})
+        assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root 1234 digsm - A Message'
+
+    def test_structured_data(*args):
+        f = RFC5424Formatter()
+        r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'args': {'structured_data': {'name': 'value', 'sdid@32473': {'escape': '\\"]'}}}})
+        result = f.format(r)
+        assert '[sdid@32473 escape="\\\\\\"\\]"]' in result
+        assert '[Undefined@32473 name="value"]' in result
 
     def test_format_string(*args):
         f = RFC5424Formatter('%(message)s banana')
