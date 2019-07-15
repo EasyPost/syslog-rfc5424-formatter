@@ -56,13 +56,21 @@ class RFC5424FormatterTestCase(TestCase):
         assert f.format(r) == '1 1970-01-01T00:00:00Z the_host root 1234 digsm - A Message'
 
     def test_structured_data(*args):
-        f = RFC5424Formatter()
+        f = RFC5424Formatter(sd_id='Undefined@32473')
         r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'args': {
             'structured_data': {'name': 'value', 'sdid@32473': {'escape': '\\"]'}}
         }})
         result = f.format(r)
         assert '[sdid@32473 escape="\\\\\\"\\]"]' in result
         assert '[Undefined@32473 name="value"]' in result
+        f = RFC5424Formatter()
+        f.sd_id = 'Undefined@32474'
+        r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'args': {
+            'structured_data': {'name': 'value', 'sdid@32474': {'escape': '\\"]'}}
+        }})
+        result = f.format(r)
+        assert '[sdid@32474 escape="\\\\\\"\\]"]' in result
+        assert '[Undefined@32474 name="value"]' in result
 
     def test_format_string(*args):
         f = RFC5424Formatter('%(message)s banana')

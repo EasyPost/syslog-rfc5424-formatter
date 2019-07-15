@@ -44,17 +44,22 @@ class RFC5424Formatter(logging.Formatter, object):
     the format string that you pass in the constructor is only
     applied to the message body (and should typically just be %(message)).
 
-   Stuctured Data Example:
+    Stuctured Data Example:
+
         [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"]
+
+    To use structured data:
+
+       1. Construct the logger with an sd_id kwarg (or set the `sd_id` attribute on the logger object)
+       2. Construct your individual records with `{'args': {'structured_data': {'iut': '3'}}}`
     '''
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, procid=None, msgid=None, sd_id=None, **kwargs):
         self._tz_fix = re.compile(r'([+-]\d{2})(\d{2})$')
-        self.procid = None
-        self.msgid = None
-        self.sd_id = "Undefined@32473"
+        self._procid = procid
+        self._msgid = msgid
+        self._sd_id = sd_id
         return super(RFC5424Formatter, self).__init__(*args, **kwargs)
 
-    
     @property
     def procid(self):
         """Default PROCID to add to syslog message"""
@@ -79,10 +84,10 @@ class RFC5424Formatter(logging.Formatter, object):
         return self._sd_id
 
     @sd_id.setter
-    def sd_id(self, id):
-        if not id:
+    def sd_id(self, sd_id):
+        if not sd_id:
             raise InvalidSDIDError("SD-ID cannot be empty")
-        self._sd_id = id
+        self._sd_id = sd_id
 
     def format(self, record):
         try:
