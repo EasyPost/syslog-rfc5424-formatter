@@ -1,4 +1,4 @@
-pytest==3.5.1
-pytest-cov==2.5.1
+pytest==5.0.1
+pytest-cov==2.7.1
 mock
 syslog_rfc5424_parser
