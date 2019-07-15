@@ -3,6 +3,7 @@ import time
 import socket
 import datetime
 import re
+import os;
 
 version_info = (1, 1, 2)
 __version__ = '.'.join(str(s) for s in version_info)
@@ -72,7 +73,8 @@ class RFC5424Formatter(logging.Formatter, object):
 
     @sd_id.setter
     def sd_id(self, id):
-        if not id: raise Exception("SD-ID cannot be empty")
+        if not id:
+            raise Exception("SD-ID cannot be empty")
         self._sd_id = id
 
     def format(self, record):
@@ -92,7 +94,7 @@ class RFC5424Formatter(logging.Formatter, object):
             isotime = isotime + 'Z'
 
         record.__dict__['isotime'] = isotime
-        record.__dict__['procid'] = self.procid if self.procid else '-'
+        record.__dict__['procid'] = self.procid if self.procid else os.getpid()
         record.__dict__['msgid'] = self.msgid if self.msgid else '-'
 
         if 'structured_data' in record.args:
@@ -109,7 +111,8 @@ class RFC5424Formatter(logging.Formatter, object):
                     default_sdparam[key] = value
 
             if len(default_sdparam) > 0:
-                if self.sd_id in all_sddata: raise Exception("Cannot use same SD-ID twice")
+                if self.sd_id in all_sddata:
+                    raise Exception("Cannot use same SD-ID twice")
                 all_sddata[self.sd_id] = default_sdparam
 
             sd = ''
