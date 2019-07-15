@@ -131,7 +131,7 @@ class RFC5424Formatter(logging.Formatter, object):
             for sdid, data in all_sddata.items():
                 sd += '[{0}'.format(sdid)
                 for key, value in data.items():
-                    escaped = value.replace('\\', '\\\\').replace(']', '\\]').\
+                    escaped = str(value).replace('\\', '\\\\').replace(']', '\\]').\
                         replace('"', '\\"')
                     sd += ' {0}="{1}"'.format(key, escaped)
                 sd += ']'

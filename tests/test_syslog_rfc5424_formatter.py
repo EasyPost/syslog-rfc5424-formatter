@@ -99,6 +99,28 @@ class RFC5424FormatterTestCase(TestCase):
             assert fields.msg == 'A Message\x00'
             assert fields.procid == 1
         finally:
+            s.close()
+            shutil.rmtree(working_dir)
+
+    def test_integration_with_structured_data(*args):
+        try:
+            working_dir = tempfile.mkdtemp()
+            s_path = os.path.join(working_dir, 'sock')
+            s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+            s.bind(s_path)
+            r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'levelname': 'DEBUG', 'args': {
+                'structured_data': {'foo': '1', 'baz': 2},
+            }})
+            h = logging.handlers.SysLogHandler(s_path, facility=logging.handlers.SysLogHandler.LOG_USER)
+            h.setFormatter(RFC5424Formatter(sd_id='foobar'))
+            h.handle(r)
+            s.settimeout(1)
+            msg_body = s.recv(1024)
+            fields = SyslogMessage.parse(msg_body.decode('utf-8'))
+            assert fields.msg == 'A Message\x00'
+            assert fields.sd == {'foobar': {'foo': '1', 'baz': '2'}}
+        finally:
+            s.close()
             shutil.rmtree(working_dir)
 
     def test_hostname_fails(*args):
