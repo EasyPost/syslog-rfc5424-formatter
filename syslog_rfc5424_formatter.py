@@ -4,7 +4,7 @@ import socket
 import datetime
 import re
 
-version_info = (1, 2, 0)
+version_info = (1, 2, 1)
 __version__ = '.'.join(str(s) for s in version_info)
 __author__ = 'EasyPost <oss@easypost.com>'
 
@@ -127,6 +127,8 @@ class RFC5424Formatter(logging.Formatter, object):
             if len(default_sdparam) > 0:
                 if self.sd_id in all_sddata:
                     raise InvalidSDIDError('Cannot use same SD-ID twice')
+                if not self.sd_id:
+                    raise InvalidSDIDError("SD-ID cannot be empty")
                 all_sddata[self.sd_id] = default_sdparam
 
             sd = ''
