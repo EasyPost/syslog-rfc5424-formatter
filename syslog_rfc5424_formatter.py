@@ -127,6 +127,8 @@ class RFC5424Formatter(logging.Formatter, object):
             if len(default_sdparam) > 0:
                 if self.sd_id in all_sddata:
                     raise InvalidSDIDError('Cannot use same SD-ID twice')
+                if not self.sd_id:
+                    raise InvalidSDIDError("SD-ID cannot be empty")
                 all_sddata[self.sd_id] = default_sdparam
 
             sd = ''
