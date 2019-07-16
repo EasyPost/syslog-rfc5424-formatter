@@ -1,3 +1,8 @@
+1.2.0
+-----
+- Support overriding procid/msgid and setting structured data (#11; thanks @tkoopman)
+- Add some new tests
+
 1.1.1
 -----
 - Add some more meta-information to setup.py
