@@ -53,12 +53,14 @@ class RFC5424Formatter(logging.Formatter, object):
        1. Construct the logger with an sd_id kwarg (or set the `sd_id` attribute on the logger object)
        2. Construct your individual records with `{'args': {'structured_data': {'iut': '3'}}}`
     '''
-    def __init__(self, *args, procid=None, msgid=None, sd_id=None, **kwargs):
+    def __init__(self, fmt='%(message)s', datefmt=None, style='%', procid=None, msgid=None, sd_id=None):
+        # note: we accept and throw away "style" because our stuff only works with %
+        # we also accept and throw away datefmt for similar reasons
         self._tz_fix = re.compile(r'([+-]\d{2})(\d{2})$')
         self._procid = procid
         self._msgid = msgid
         self._sd_id = sd_id
-        return super(RFC5424Formatter, self).__init__(*args, **kwargs)
+        return super(RFC5424Formatter, self).__init__(fmt=fmt, datefmt=None)
 
     @property
     def procid(self):
