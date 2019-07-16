@@ -6,13 +6,14 @@ import os
 import socket
 import time
 
+import pytest
 from unittest import TestCase
 
 import mock
 from syslog_rfc5424_parser import SyslogMessage
 from syslog_rfc5424_parser.constants import SyslogSeverity, SyslogFacility
 
-from syslog_rfc5424_formatter import RFC5424Formatter
+from syslog_rfc5424_formatter import RFC5424Formatter, InvalidSDIDError
 
 
 @mock.patch('socket.gethostname', return_value='the_host')
@@ -71,6 +72,14 @@ class RFC5424FormatterTestCase(TestCase):
         result = f.format(r)
         assert '[sdid@32474 escape="\\\\\\"\\]"]' in result
         assert '[Undefined@32474 name="value"]' in result
+
+    def test_structured_data_no_sdid(*args):
+        f = RFC5424Formatter()
+        r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message', 'args': {
+            'structured_data': {'name': 'value', 'sdid@32473': {'escape': '\\"]'}}
+        }})
+        with pytest.raises(InvalidSDIDError):
+            f.format(r)
 
     def test_format_string(*args):
         f = RFC5424Formatter('%(message)s banana')

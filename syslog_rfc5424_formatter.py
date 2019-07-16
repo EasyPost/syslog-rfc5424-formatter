@@ -88,7 +88,7 @@ class RFC5424Formatter(logging.Formatter, object):
     @sd_id.setter
     def sd_id(self, sd_id):
         if not sd_id:
-            raise InvalidSDIDError("SD-ID cannot be empty")
+            raise InvalidSDIDError('SD-ID cannot be empty')
         self._sd_id = sd_id
 
     def format(self, record):
@@ -128,7 +128,7 @@ class RFC5424Formatter(logging.Formatter, object):
                 if self.sd_id in all_sddata:
                     raise InvalidSDIDError('Cannot use same SD-ID twice')
                 if not self.sd_id:
-                    raise InvalidSDIDError("SD-ID cannot be empty")
+                    raise InvalidSDIDError('SD-ID cannot be empty')
                 all_sddata[self.sd_id] = default_sdparam
 
             sd = ''

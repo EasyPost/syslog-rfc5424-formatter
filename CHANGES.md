@@ -1,3 +1,7 @@
+1.2.1
+-----
+- Raise an exception if you pass structured data without setting SD-ID
+
 1.2.0
 -----
 - Support overriding procid/msgid and setting structured data (#11; thanks @tkoopman)
