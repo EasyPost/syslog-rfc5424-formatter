@@ -1,3 +1,7 @@
+1.2.2
+-----
+- Fix a bug when using records with arguments
+
 1.2.1
 -----
 - Raise an exception if you pass structured data without setting SD-ID
