@@ -137,3 +137,22 @@ class RFC5424FormatterTestCase(TestCase):
             f = RFC5424Formatter()
             r = logging.makeLogRecord({'name': 'root', 'msg': 'A Message'})
             assert f.format(r) == '1 1970-01-01T00:00:00Z - root 1 - - A Message'
+
+    def test_logger_integration(*args):
+        try:
+            working_dir = tempfile.mkdtemp()
+            s_path = os.path.join(working_dir, 'sock')
+            s = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+            s.bind(s_path)
+            h = logging.handlers.SysLogHandler(s_path, facility=logging.handlers.SysLogHandler.LOG_USER)
+            h.setFormatter(RFC5424Formatter())
+            lr = logging.getLogger('test_logger_integration')
+            lr.addHandler(h)
+            lr.setLevel(logging.DEBUG)
+            lr.info('this is a test %s %d', 'foo', 1)
+            s.settimeout(1)
+            msg_body = s.recv(1024)
+            assert msg_body == b'<14>1 1970-01-01T00:00:00Z the_host test_logger_integration 1 - - this is a test foo 1\x00'  # noqa
+        finally:
+            s.close()
+            shutil.rmtree(working_dir)

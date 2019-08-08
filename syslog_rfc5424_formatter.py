@@ -144,7 +144,9 @@ class RFC5424Formatter(logging.Formatter, object):
         else:
             record.__dict__['sd'] = '-'
 
-        record.__dict__.update(record.args)
+        for key in ('procid', 'msgid'):
+            if key in record.args:
+                record.__dict__[key] = record.args.pop(key)
 
         header = '1 {isotime} {hostname} {name} {procid} {msgid} {sd} '.format(
             **record.__dict__
