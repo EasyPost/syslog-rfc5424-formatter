@@ -1,6 +1,6 @@
 This module implements a python `logging` formatter which produces well-formed RFC5424-compatible Syslog messages to a given socket.
 
-[![Build Status](https://travis-ci.org/EasyPost/syslog-rfc5424-formatter.svg?branch=master)](https://travis-ci.org/EasyPost/syslog-rfc5424-formatter)
+[![Build Status](https://travis-ci.com/EasyPost/syslog-rfc5424-formatter.svg?branch=master)](https://travis-ci.com/EasyPost/syslog-rfc5424-formatter)
 [![PyPI version](https://badge.fury.io/py/syslog-rfc5424-formatter.svg)](https://badge.fury.io/py/syslog-rfc5424-formatter)
 [![Documentation Status](https://readthedocs.org/projects/syslog-rfc5424-formatter/badge/?version=latest)](https://syslog-rfc5424-formatter.readthedocs.io/en/latest/?badge=latest)
 
