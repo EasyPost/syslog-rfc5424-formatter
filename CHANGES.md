@@ -1,3 +1,8 @@
+NEXT
+----
+- Drop support for Python 3.3, 3.4, and 3.5
+- Move CI from Travis to Github Actions
+
 1.2.2
 -----
 - Fix a bug when using records with arguments
