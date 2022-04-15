@@ -1,7 +1,8 @@
-NEXT
+1.2.3
 ----
 - Drop support for Python 3.3, 3.4, and 3.5
 - Move CI from Travis to Github Actions
+- Improve packaging
 
 1.2.2
 -----
