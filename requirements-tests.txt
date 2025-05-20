@@ -2,10 +2,10 @@ pytest==4.6.4
 pytest-cov==2.7.1
 mock==3.0.*
 # 45.0.0 removes python 2.x support
-setuptools>=42,<45
+setuptools>=42,<81
 # zipp after 0.5 tries to install its own setuptools at build time,
 # which fails on python 2.7
-zipp==0.5.*
+zipp==3.21.*
 # 5.0.0 removes python 2.x support
 configparser<5
 syslog_rfc5424_parser==0.3.2
